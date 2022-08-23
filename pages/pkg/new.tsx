@@ -3,10 +3,10 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { tw } from 'twind'
-import WebsiteHead from '../components/Head'
+import WebsiteHead from '../../components/Head'
 import { RainbowKitSiweNextAuthProvider } from '@rainbow-me/rainbowkit-siwe-next-auth'
 import { RainbowKitProvider, lightTheme } from '@rainbow-me/rainbowkit'
-import { chain, chains, provider } from '../lib/web3'
+import { chain, chains, provider } from '../../lib/web3'
 import { useState, setState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useEnsName } from 'wagmi'
@@ -14,12 +14,7 @@ import Link from 'next/link'
 
 import '@rainbow-me/rainbowkit/styles.css'
 
-type Message = {
-  content?: String
-  error?: boolean
-}
-
-const Home: NextPage = () => {
+const NewPackage: NextPage = () => {
   const { data: session, status } = useSession()
   const { data: ensName } = useEnsName({ address: session?.address })
   const [response, setResponse] = useState()
@@ -112,4 +107,4 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+export default NewPackage

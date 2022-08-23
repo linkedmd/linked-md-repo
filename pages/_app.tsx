@@ -28,7 +28,7 @@ const navigation = [
   },
   {
     name: 'New package or version',
-    href: '/new',
+    href: '/pkg/new',
   },
 ]
 
