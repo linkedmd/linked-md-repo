@@ -89,6 +89,10 @@ const NewPackage: NextPage = () => {
           </div>
           <div className={tw`my-8 flex flex-col`}>
             <label htmlFor="name">Package name</label>
+            <p className={tw`text-sm italic`}>
+              To publish a new version of an existing package, type the package
+              name here
+            </p>
             <input
               type="text"
               name="name"
@@ -98,13 +102,17 @@ const NewPackage: NextPage = () => {
           </div>
           <div className={tw`my-8 flex flex-col`}>
             <label htmlFor="url">Package URL</label>
+            <p className={tw`text-sm italic`}>
+              Any HTTP/HTTPS URL works, and then your file will be uploaded to
+              IPFS
+            </p>
             <input type="url" name="url" required className={tw`border h-8`} />
           </div>
           <button
             type="submit"
             className={tw`w-full text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-sm text-sm px-5 py-2.5 mr-2 mb-2`}
           >
-            Create/update package
+            Publish package
           </button>
         </form>
       </RainbowKitProvider>

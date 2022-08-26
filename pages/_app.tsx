@@ -38,8 +38,13 @@ function MyApp({ Component, pageProps }: AppProps) {
       <SessionProvider refetchInterval={0} session={pageProps.session}>
         <div className={tw`max-w-xl m-auto px-4 py-8`}>
           <div className={tw`text-7xl`}>⍈</div>
-          <h1 className={tw`text-2xl my-2`}>Linked Markdown repo</h1>
-          <p>An open repository of open source, interconnected documents</p>
+          <h1 className={tw`text-2xl my-2`}>
+            <a href="https://linked.md" className={tw`underline`}>
+              Linked Markdown
+            </a>{' '}
+            repo
+          </h1>
+          <p>An repository of open source, interconnected documents</p>
           <ul className={tw`flex flex-row gap-4 my-8`}>
             {navigation.map((item, i) => (
               <React.Fragment key={i}>
