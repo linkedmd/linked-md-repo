@@ -3,6 +3,7 @@ import withTwindApp from '@twind/next/app'
 import { tw } from 'twind'
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import '../styles/global.css'
 import { configureChains, createClient, WagmiConfig } from 'wagmi'
 import { SessionProvider } from 'next-auth/react'
@@ -55,6 +56,16 @@ function MyApp({ Component, pageProps }: AppProps) {
             ))}
           </ul>
           <Component {...pageProps} />
+          <footer className={tw`mt-8 text-sm flex flex-row`}>
+            Made with ❤️ in{' '}
+            <a
+              href="https://nation3.org"
+              className={tw`underline ml-1 flex flex-row`}
+            >
+              <Image src="/flag.svg" width={16} height={16} />
+              <span className={tw`ml-1`}>Nation3</span>
+            </a>
+          </footer>
         </div>
       </SessionProvider>
     </WagmiConfig>

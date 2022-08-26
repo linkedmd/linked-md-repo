@@ -63,27 +63,30 @@ const NewPackage: NextPage = () => {
           borderRadius: 'small',
         })}
       >
-        {response && (
-          <div className={tw`border p-4`}>
-            {response.error ? (
-              <span className={tw`text-red-600`}>{errors[response.error]}</span>
-            ) : (
-              <span className={tw`text-green-600`}>
-                Your package has been published!{' '}
-                <Link
-                  href={`/${
-                    ensName ? ensName : session?.address
-                  }/${packageName}`}
-                >
-                  <a className={tw`underline hover:text-green-800`}>
-                    Check it out
-                  </a>
-                </Link>
-                .
-              </span>
-            )}
-          </div>
-        )}
+        {response.success ||
+          (response.error && (
+            <div className={tw`border p-4`}>
+              {response.error ? (
+                <span className={tw`text-red-600`}>
+                  {errors[response.error]}
+                </span>
+              ) : (
+                <span className={tw`text-green-600`}>
+                  Your package has been published!{' '}
+                  <Link
+                    href={`/${
+                      ensName ? ensName : session?.address
+                    }/${packageName}`}
+                  >
+                    <a className={tw`underline hover:text-green-800`}>
+                      Check it out
+                    </a>
+                  </Link>
+                  .
+                </span>
+              )}
+            </div>
+          ))}
         <form onSubmit={handleSubmit}>
           <WebsiteHead title="Create a new package or a new version of an existing package" />
           <div className={tw`my-8`}>
