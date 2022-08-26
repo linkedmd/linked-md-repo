@@ -6,9 +6,10 @@ const ETH_ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/
 const DOMAIN_REGEX =
   /^(((?!\-))(xn\-\-)?[a-z0-9\-_]{0,61}[a-z0-9]{1,1}\.)*(xn\-\-)?([a-z0-9\-]{1,61}|[a-z0-9\-]{1,30})\.[a-z]{2,}$/
 
-const provider = ethers.getDefaultProvider(chain.mainnet.id, {
-  alchemy: process.env.ALCHEMY_ID,
-})
+const provider = ethers.providers.InfuraProvider.getWebSocketProvider(
+  chain.mainnet.id,
+  process.env.INFURA_ID
+)
 
 function sliced(address: string): string {
   return `${address.substring(0, 4)}...${address.slice(-4)}`
@@ -19,13 +20,17 @@ export async function formatAddressOrEnsName(
 ): Promise<Author> {
   let author: any = {}
   if (addressOrEnsName.match(ETH_ADDRESS_REGEX)) {
+    console.log(1)
     const ensName = await provider.lookupAddress(addressOrEnsName)
+    console.log(ensName)
     author = {
       ensName,
       address: addressOrEnsName,
     }
   } else if (addressOrEnsName.match(DOMAIN_REGEX)) {
+    console.log(3)
     const address = await provider.resolveName(addressOrEnsName)
+    console.log(4)
     author = {
       ensName: addressOrEnsName,
       address,

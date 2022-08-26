@@ -40,6 +40,7 @@ const ogm = new OGM({
   typeDefs,
   driver,
 })
+
 const Author = ogm.model('Author')
 const Package = ogm.model('Package')
 const PackageVersion = ogm.model('PackageVersion')
