@@ -3,7 +3,7 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { getCsrfToken } from 'next-auth/react'
 import { SiweMessage } from 'siwe'
 
-export default async function auth(req, res) {
+export default async function auth(req: any, res: any) {
   const providers = [
     CredentialsProvider({
       name: 'Ethereum',
@@ -69,10 +69,10 @@ export default async function auth(req, res) {
     secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
       async session({ session, token }) {
-        session.address = token.sub
-        session.user.name = token.sub
-        session.user.image = 'https://www.fillmurray.com/128/128'
-        return session
+        return {
+          ...session,
+          address: token.sub,
+        }
       },
     },
   })

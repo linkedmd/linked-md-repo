@@ -7,8 +7,13 @@ import { getPackages } from '../lib/database'
 import { formatAddressOrEnsName } from '../lib/ens'
 import Link from 'next/link'
 import WebsiteHead from '../components/Head'
+import { Package } from '../lib/types'
 
-const Home: NextPage = ({ pkgs }) => {
+type Props = {
+  pkgs: Array<Package>
+}
+
+const Home: NextPage<Props> = ({ pkgs }) => {
   return (
     <div>
       <WebsiteHead title="Home" />

@@ -6,7 +6,6 @@ import Link from 'next/link'
 import '../styles/global.css'
 import { configureChains, createClient, WagmiConfig } from 'wagmi'
 import { SessionProvider } from 'next-auth/react'
-import { AppProps } from 'next/app'
 import { getDefaultWallets } from '@rainbow-me/rainbowkit'
 import { chains, provider } from '../lib/web3'
 

@@ -8,8 +8,13 @@ import Link from 'next/link'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import { formatAddressOrEnsName } from '../../lib/ens'
 import WebsiteHead from '../../components/Head'
+import { Package } from '../../lib/types'
 
-const Package: NextPage = ({ pkg }) => {
+type Props = {
+  pkg: Package
+}
+
+const Package: NextPage<Props> = ({ pkg }) => {
   return (
     <div>
       <WebsiteHead title={`${pkg.author.formatted} / ${pkg.name}`} />
@@ -75,7 +80,11 @@ const Package: NextPage = ({ pkg }) => {
   )
 }
 
-export async function getServerSideProps({ query }) {
+export async function getServerSideProps({
+  query,
+}: {
+  query: { author: string; name: string }
+}) {
   const { author, name } = query
   const formattedAuthor = await formatAddressOrEnsName(author)
   if (formattedAuthor.ensName && formattedAuthor.ensName !== author) {

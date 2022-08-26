@@ -1,5 +1,6 @@
 import { ethers } from 'ethers'
 import { chain } from './web3'
+import { Author } from './types'
 
 const ETH_ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/
 const DOMAIN_REGEX =
@@ -9,12 +10,14 @@ const provider = ethers.getDefaultProvider(chain.mainnet.id, {
   alchemy: process.env.ALCHEMY_ID,
 })
 
-function sliced(address) {
+function sliced(address: string): string {
   return `${address.substring(0, 4)}...${address.slice(-4)}`
 }
 
-export async function formatAddressOrEnsName(addressOrEnsName) {
-  let author = {}
+export async function formatAddressOrEnsName(
+  addressOrEnsName: string
+): Promise<Author> {
+  let author: any = {}
   if (addressOrEnsName.match(ETH_ADDRESS_REGEX)) {
     const ensName = await provider.lookupAddress(addressOrEnsName)
     author = {
@@ -32,6 +35,8 @@ export async function formatAddressOrEnsName(addressOrEnsName) {
       address: addressOrEnsName,
     }
   }
-  author.formatted = author.ensName || sliced(author.address)
-  return author
+  return {
+    formatted: author.ensName || sliced(author.address),
+    ...author,
+  }
 }

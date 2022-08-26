@@ -6,8 +6,13 @@ import { getPackageVersion } from '../../../lib/database'
 import Breadcrumbs from '../../../components/Breadcrumbs'
 import { formatAddressOrEnsName } from '../../../lib/ens'
 import WebsiteHead from '../../../components/Head'
+import { PackageVersion } from '../../../lib/types'
 
-const Package: NextPage = ({ pkgVersion }) => {
+type Props = {
+  pkgVersion: PackageVersion
+}
+
+const PackageVersion: NextPage<Props> = ({ pkgVersion }) => {
   return (
     <div>
       <WebsiteHead
@@ -29,13 +34,17 @@ const Package: NextPage = ({ pkgVersion }) => {
   )
 }
 
-export async function getServerSideProps({ query }) {
+export async function getServerSideProps({
+  query,
+}: {
+  query: { author: string; name: string; cid: string }
+}) {
   const { author, name, cid } = query
   const formattedAuthor = await formatAddressOrEnsName(author)
   if (formattedAuthor.ensName && formattedAuthor.ensName !== author) {
     return {
       redirect: {
-        destination: `/${ensName}/${name}/${version}`,
+        destination: `/${formattedAuthor.ensName}/${name}/${cid}`,
         permanent: false,
       },
     }
@@ -54,4 +63,4 @@ export async function getServerSideProps({ query }) {
   }
 }
 
-export default Package
+export default PackageVersion

@@ -3,27 +3,25 @@ import { getToken } from 'next-auth/jwt'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { NFTStorage, Blob } from 'nft.storage'
 import { createPackage } from '../../lib/database'
-
-enum Errors {
-  Unauthorized = 'unauthorized',
-  FileFetch = 'fileFetch',
-  IPFSUpload = 'ipfsUpload',
-  Database = 'database',
-}
+import { PublishingErrors } from '../../lib/types'
 
 const client = new NFTStorage({
   token: process.env.NFTSTORAGE_KEY || '',
 })
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async function publish(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const session = await getSession({ req })
 
   try {
-    if (!session) throw Errors.Unauthorized
+    if (!session) throw PublishingErrors.Unauthorized
 
     const token = await getToken({ req })
-
     const authorAddress = token?.sub ?? null
+
+    if (!authorAddress) throw PublishingErrors.Unauthorized
 
     const { name, url } = req.body
 
@@ -33,14 +31,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       request = await fetch(url)
       blob = await request.blob()
     } catch (e) {
-      throw Errors.FileFetch
+      throw PublishingErrors.FileFetch
     }
 
     let cid
     try {
       cid = await client.storeBlob(blob)
     } catch (e) {
-      throw Errors.IPFSUpload
+      throw PublishingErrors.IPFSUpload
     }
 
     const success = await createPackage({ name, cid, authorAddress })
@@ -48,10 +46,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (success) {
       res.status(200).json({ success: true })
     } else {
-      throw Errors.Database
+      throw PublishingErrors.Database
     }
   } catch (e) {
-    console.log(e)
     return res.status(500).json({ error: e })
   }
 }

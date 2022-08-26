@@ -2,10 +2,12 @@ import { Neo4jGraphQL } from '@neo4j/graphql'
 import { OGM } from '@neo4j/graphql-ogm'
 import { ApolloServer, gql } from 'apollo-server'
 import neo4j from 'neo4j-driver'
+import env from './config'
+import { FetchPackageParams } from './types'
 
 const driver = neo4j.driver(
-  process.env.NEO4J_URI,
-  neo4j.auth.basic(process.env.NEO4J_USERNAME, process.env.NEO4J_PASSWORD)
+  env('NEO4J_URI'),
+  neo4j.auth.basic(env('NEO4J_USERNAME'), env('NEO4J_PASSWORD'))
 )
 
 const typeDefs = gql`
@@ -44,7 +46,11 @@ const PackageVersion = ogm.model('PackageVersion')
 
 ogm.init()
 
-export async function createPackage({ name, cid, authorAddress }) {
+export async function createPackage({
+  name,
+  cid,
+  authorAddress,
+}: FetchPackageParams) {
   const pkg = await Package.find({
     where: {
       name,
@@ -67,9 +73,7 @@ export async function createPackage({ name, cid, authorAddress }) {
         },
       ],
     })
-    console.log(pkgVersion)
   } else {
-    console.log('manplo')
     const pkg = await Package.create({
       input: [
         {
@@ -99,7 +103,7 @@ export async function createPackage({ name, cid, authorAddress }) {
   return true
 }
 
-export async function getPackage({ authorAddress, name }) {
+export async function getPackage({ authorAddress, name }: FetchPackageParams) {
   const selectionSet = `
     {
       name
@@ -143,7 +147,11 @@ export async function getPackages() {
   return pkgs
 }
 
-export async function getPackageVersion({ authorAddress, name, cid }) {
+export async function getPackageVersion({
+  authorAddress,
+  name,
+  cid,
+}: FetchPackageParams) {
   const selectionSet = `
     {
       cid
@@ -167,8 +175,7 @@ export async function getPackageVersion({ authorAddress, name, cid }) {
   return pkgVersion[0] || false
 }
 
-export async function getAuthor({ authorAddress }) {
-  console.log(authorAddress)
+export async function getAuthor({ authorAddress }: { authorAddress: string }) {
   const selectionSet = `
     {
       address
