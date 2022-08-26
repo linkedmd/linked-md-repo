@@ -1,7 +1,7 @@
 import Head from 'next/head'
 
 export default function WebsiteHead({ title }: any) {
-  const fullTitle = `Linked Markdown packages ${title}`
+  const fullTitle = `Linked Markdown packages | ${title}`
   const description = 'Repository of Linked Markdown packages'
   const image = ''
 

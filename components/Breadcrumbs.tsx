@@ -13,15 +13,13 @@ export default function Breadcrumbs({ author, name, cid }) {
   return (
     <h2 className={tw`text-3xl`}>
       <span className={tw`text-gray-400`}>
-        <StandardLink href={`/pkg/${author.ensName || author.address}`}>
-          {author.ensName || author.address}
+        <StandardLink href={`/${author.ensName || author.address}`}>
+          {author.formatted}
         </StandardLink>{' '}
         {name && '/ '}
         {cid && (
           <>
-            <StandardLink
-              href={`/pkg/${author.ensName || author.address}/${name}`}
-            >
+            <StandardLink href={`/${author.ensName || author.address}/${name}`}>
               {name}
             </StandardLink>
             {' / '}

@@ -46,9 +46,12 @@ ogm.init()
 
 export async function createPackage({ name, cid, authorAddress }) {
   const pkg = await Package.find({
-    name,
-    author: { address: authorAddress },
+    where: {
+      name,
+      author: { address: authorAddress },
+    },
   })
+  console.log(pkg)
   if (pkg[0]) {
     const pkgVersion = await PackageVersion.create({
       input: [
@@ -66,6 +69,7 @@ export async function createPackage({ name, cid, authorAddress }) {
     })
     console.log(pkgVersion)
   } else {
+    console.log('manplo')
     const pkg = await Package.create({
       input: [
         {
@@ -117,6 +121,26 @@ export async function getPackage({ authorAddress, name }) {
   })
 
   return pkg[0] || false
+}
+
+export async function getPackages() {
+  const selectionSet = `
+    {
+      name
+      author {
+        address
+      }
+      versions {
+        cid
+        createdAt
+      }
+    }
+  `
+  const pkgs = await Package.find({
+    selectionSet,
+  })
+
+  return pkgs
 }
 
 export async function getPackageVersion({ authorAddress, name, cid }) {

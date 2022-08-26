@@ -3,10 +3,10 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { tw } from 'twind'
-import WebsiteHead from '../../components/Head'
+import WebsiteHead from '../components/Head'
 import { RainbowKitSiweNextAuthProvider } from '@rainbow-me/rainbowkit-siwe-next-auth'
 import { RainbowKitProvider, lightTheme } from '@rainbow-me/rainbowkit'
-import { chain, chains, provider } from '../../lib/web3'
+import { chain, chains, provider } from '../lib/web3'
 import { useState, setState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useEnsName } from 'wagmi'
@@ -37,7 +37,6 @@ const NewPackage: NextPage = () => {
 
     const result = await res.json()
     setResponse(result)
-    console.log(result)
   }
 
   return (
@@ -56,6 +55,12 @@ const NewPackage: NextPage = () => {
                   {
                     unauthorized:
                       'You are unauthorized to publish this package. Are you sure you are the owner?',
+                    fileFetch:
+                      'Fetching your file failed. Are you sure the URL is right?',
+                    ipfsUpload:
+                      'Uploading your file to IPFS failed. This is likely an internal error.',
+                    database:
+                      'Adding your file to the database failed. This is likely an internal error.',
                   }[response.error]
                 }
               </span>
@@ -63,7 +68,7 @@ const NewPackage: NextPage = () => {
               <span className={tw`text-green-600`}>
                 Your package has been published!{' '}
                 <Link
-                  href={`/pkg/${
+                  href={`/${
                     ensName ? ensName : session.address
                   }/${packageName}`}
                 >

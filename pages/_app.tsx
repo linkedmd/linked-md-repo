@@ -3,7 +3,7 @@ import withTwindApp from '@twind/next/app'
 import { tw } from 'twind'
 import React from 'react'
 import Link from 'next/link'
-
+import '../styles/global.css'
 import { configureChains, createClient, WagmiConfig } from 'wagmi'
 import { SessionProvider } from 'next-auth/react'
 import { AppProps } from 'next/app'
@@ -28,7 +28,7 @@ const navigation = [
   },
   {
     name: 'New package or version',
-    href: '/pkg/new',
+    href: '/new',
   },
 ]
 
@@ -37,7 +37,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     <WagmiConfig client={wagmiClient}>
       <SessionProvider refetchInterval={0} session={pageProps.session}>
         <div className={tw`max-w-xl m-auto px-4 py-8`}>
-          <h1 className={tw`text-2xl`}>Linked Markdown packages</h1>
+          <div className={tw`text-7xl`}>⍈</div>
+          <h1 className={tw`text-2xl my-2`}>Linked Markdown repo</h1>
+          <p>An open repository of open source, interconnected documents</p>
           <ul className={tw`flex flex-row gap-4 my-8`}>
             {navigation.map((item, i) => (
               <React.Fragment key={i}>

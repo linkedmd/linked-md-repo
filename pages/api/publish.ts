@@ -6,6 +6,9 @@ import { createPackage } from '../../lib/database'
 
 enum Errors {
   Unauthorized = 'unauthorized',
+  FileFetch = 'fileFetch',
+  IPFSUpload = 'ipfsUpload',
+  Database = 'database',
 }
 
 const client = new NFTStorage({
@@ -14,21 +17,41 @@ const client = new NFTStorage({
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getSession({ req })
-  const token = await getToken({ req })
 
-  const authorAddress = token?.sub ?? null
+  try {
+    if (!session) throw Errors.Unauthorized
 
-  const { name, url } = req.body
+    const token = await getToken({ req })
 
-  const request = await fetch(url)
-  const blob = await request.blob()
-  const cid = await client.storeBlob(blob)
+    const authorAddress = token?.sub ?? null
 
-  const success = await createPackage({ name, cid, authorAddress })
+    const { name, url } = req.body
 
-  if (session) {
-    res.status(200).json({ success: true })
-  } else {
-    res.status(401).json({ error: Errors.Unauthorized })
+    let request
+    let blob
+    try {
+      request = await fetch(url)
+      blob = await request.blob()
+    } catch (e) {
+      throw Errors.FileFetch
+    }
+
+    let cid
+    try {
+      cid = await client.storeBlob(blob)
+    } catch (e) {
+      throw Errors.IPFSUpload
+    }
+
+    const success = await createPackage({ name, cid, authorAddress })
+
+    if (success) {
+      res.status(200).json({ success: true })
+    } else {
+      throw Errors.Database
+    }
+  } catch (e) {
+    console.log(e)
+    return res.status(500).json({ error: e })
   }
 }

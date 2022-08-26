@@ -9,14 +9,29 @@ const provider = ethers.getDefaultProvider(chain.mainnet.id, {
   alchemy: process.env.ALCHEMY_ID,
 })
 
+function sliced(address) {
+  return `${address.substring(0, 4)}...${address.slice(-4)}`
+}
+
 export async function formatAddressOrEnsName(addressOrEnsName) {
+  let author = {}
   if (addressOrEnsName.match(ETH_ADDRESS_REGEX)) {
     const ensName = await provider.lookupAddress(addressOrEnsName)
-    return { ensName, address: addressOrEnsName }
+    author = {
+      ensName,
+      address: addressOrEnsName,
+    }
   } else if (addressOrEnsName.match(DOMAIN_REGEX)) {
     const address = await provider.resolveName(addressOrEnsName)
-    return { ensName: addressOrEnsName, address }
+    author = {
+      ensName: addressOrEnsName,
+      address,
+    }
   } else {
-    return { address: addressOrEnsName }
+    author = {
+      address: addressOrEnsName,
+    }
   }
+  author.formatted = author.ensName || sliced(author.address)
+  return author
 }
