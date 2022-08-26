@@ -18,7 +18,10 @@ import '@rainbow-me/rainbowkit/styles.css'
 const NewPackage: NextPage = () => {
   const { data: session, status } = useSession()
   const { data: ensName } = useEnsName({ address: session?.address as string })
-  const [response, setResponse] = useState<{ error?: PublishingErrors }>({})
+  const [response, setResponse] = useState<{
+    error?: PublishingErrors
+    success?: boolean
+  }>({})
   const [packageName, setPackageName] = useState('')
 
   const handleSubmit = async (event: React.SyntheticEvent) => {
