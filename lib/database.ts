@@ -24,9 +24,9 @@ const typeDefs = gql`
   type PackageVersion {
     package: Package! @relationship(type: "VERSION", direction: OUT)
     cid: String! @unique
-    depencendies: [PackageVersion!]!
+    dependencies: [PackageVersion!]!
       @relationship(type: "DEPENDS", direction: OUT)
-    dependents: [PackageVersion!]! @relationship(type: "DEPENDS", direction: IN)
+    dependants: [PackageVersion!]! @relationship(type: "DEPENDS", direction: IN)
     createdAt: DateTime! @timestamp(operations: [CREATE])
   }
 `
@@ -48,9 +48,10 @@ const PackageVersion = ogm.model('PackageVersion')
 ogm.init()
 
 export async function createPackage({
+  authorAddress,
   name,
   cid,
-  authorAddress,
+  imports
 }: FetchPackageParams) {
   const pkg = await Package.find({
     where: {
@@ -58,7 +59,19 @@ export async function createPackage({
       author: { address: authorAddress },
     },
   })
-  console.log(pkg)
+  const dependencies = imports.map(({ authorAddress, name, cid, }) => ({
+    where: {
+      node: {
+        cid: cid,
+        package: {
+          name: name,
+          author: {
+            address: authorAddress
+          }
+        },
+      }
+    }
+  }))
   if (pkg[0]) {
     const pkgVersion = await PackageVersion.create({
       input: [
@@ -71,6 +84,9 @@ export async function createPackage({
             },
           },
           cid,
+          dependencies: {
+            connect: dependencies
+          }
         },
       ],
     })
@@ -93,13 +109,15 @@ export async function createPackage({
             create: {
               node: {
                 cid,
+                dependencies: {
+                  connect: dependencies
+                }
               },
             },
           },
         },
       ],
     })
-    console.log(pkg)
   }
   return true
 }
@@ -149,8 +167,6 @@ export async function getPackages() {
 }
 
 export async function getPackageVersion({
-  authorAddress,
-  name,
   cid,
 }: FetchPackageParams) {
   const selectionSet = `
@@ -163,11 +179,28 @@ export async function getPackageVersion({
           address
         }
       }
+      dependencies {
+        cid
+        package {
+          name
+          author {
+            address
+          }
+        }
+      }
+      dependants {
+        cid
+        package {
+          name
+          author {
+            address
+          }
+        }
+      }
     }
   `
   const pkgVersion = await PackageVersion.find({
     where: {
-      package: { name, author: { address: authorAddress } },
       cid,
     },
     selectionSet,

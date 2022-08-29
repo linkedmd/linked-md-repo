@@ -2,8 +2,10 @@ import { getSession } from 'next-auth/react'
 import { getToken } from 'next-auth/jwt'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { NFTStorage, Blob } from 'nft.storage'
-import { createPackage } from '../../lib/database'
+import { getPackageVersion, createPackage } from '../../lib/database'
 import { PublishingErrors } from '../../lib/types'
+import { LinkedMarkdown } from '@linkedmd/parser'
+import { formatAddressOrEnsName } from '../../lib/ens'
 
 const client = new NFTStorage({
   token: process.env.NFTSTORAGE_KEY || '',
@@ -34,6 +36,20 @@ export default async function publish(
       throw PublishingErrors.FileFetch
     }
 
+    let imports
+    try {
+      const file = new LinkedMarkdown(await blob.text())
+      await file.parse()
+      imports = await Promise.all(file.data.imports.map(async (namedImport) => {
+        const [author, name, cid] = namedImport.fromModule.split('/')
+        const formattedAuthor = await formatAddressOrEnsName(author)
+        return { authorAddress: formattedAuthor.address, name, cid }
+      }))
+    } catch (e) {
+      throw PublishingErrors.Parse
+    }
+
+    console.log(imports)
     let cid
     try {
       cid = await client.storeBlob(blob)
@@ -41,14 +57,18 @@ export default async function publish(
       throw PublishingErrors.IPFSUpload
     }
 
-    const success = await createPackage({ name, cid, authorAddress })
+    const packageExists = await getPackageVersion({ cid })
+    if (packageExists) throw PublishingErrors.AlreadyExists
+
+    const success = await createPackage({ authorAddress, name, cid, imports })
 
     if (success) {
-      res.status(200).json({ success: true })
+      return res.status(200).json({ success: true })
     } else {
       throw PublishingErrors.Database
     }
   } catch (e) {
+    console.log(e)
     return res.status(500).json({ error: e })
   }
 }

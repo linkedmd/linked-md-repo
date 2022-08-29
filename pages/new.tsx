@@ -52,8 +52,10 @@ const NewPackage: NextPage = () => {
     unauthorized:
       'You are unauthorized to publish this package. Are you sure you are the owner?',
     fileFetch: 'Fetching your file failed. Are you sure the URL is right?',
+    parse: 'Parsing your file failed. Are you sure it follows the Linked Markdown spec?',
     ipfsUpload:
       'Uploading your file to IPFS failed. This is likely an internal error.',
+    alreadyExists: 'A package version with exactly the same content already exists.',
     database:
       'Adding your file to the database failed. This is likely an internal error.',
   }
@@ -66,30 +68,30 @@ const NewPackage: NextPage = () => {
           borderRadius: 'small',
         })}
       >
-        {response.success ||
-          (response.error && (
-            <div className={tw`border p-4`}>
-              {response.error ? (
-                <span className={tw`text-red-600`}>
-                  {errors[response.error]}
-                </span>
-              ) : (
-                <span className={tw`text-green-600`}>
-                  Your package has been published!{' '}
-                  <Link
-                    href={`/${
-                      ensName ? ensName : session?.address
-                    }/${packageName}`}
-                  >
-                    <a className={tw`underline hover:text-green-800`}>
-                      Check it out
-                    </a>
-                  </Link>
-                  .
-                </span>
-              )}
-            </div>
-          ))}
+        {response.success && (
+          <div className={tw`border p-4`}>
+              <span className={tw`text-green-600`}>
+                Your package has been published!{' '}
+                <Link
+                  href={`/${
+                    ensName ? ensName : session?.address
+                  }/${packageName}`}
+                >
+                  <a className={tw`underline hover:text-green-800`}>
+                    Check it out
+                  </a>
+                </Link>
+                .
+              </span>
+          </div>
+        )}
+        {response.error && (
+          <div className={tw`border p-4`}>
+              <span className={tw`text-red-600`}>
+                {errors[response.error]}
+              </span>
+          </div>
+        )}
         <form onSubmit={handleSubmit}>
           <WebsiteHead title="Create a new package or a new version of an existing package" />
           <div className={tw`my-8`}>

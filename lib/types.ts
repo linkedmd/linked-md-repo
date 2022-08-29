@@ -26,7 +26,9 @@ type PackageVersion = {
 enum PublishingErrors {
   Unauthorized = 'unauthorized',
   FileFetch = 'fileFetch',
+  Parse = 'parse',
   IPFSUpload = 'ipfsUpload',
+  AlreadyExists = 'alreadyExists',
   Database = 'database',
 }
 

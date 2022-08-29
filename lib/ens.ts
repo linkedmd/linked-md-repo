@@ -20,17 +20,13 @@ export async function formatAddressOrEnsName(
 ): Promise<Author> {
   let author: any = {}
   if (addressOrEnsName.match(ETH_ADDRESS_REGEX)) {
-    console.log(1)
     const ensName = await provider.lookupAddress(addressOrEnsName)
-    console.log(ensName)
     author = {
       ensName,
       address: addressOrEnsName,
     }
   } else if (addressOrEnsName.match(DOMAIN_REGEX)) {
-    console.log(3)
     const address = await provider.resolveName(addressOrEnsName)
-    console.log(4)
     author = {
       ensName: addressOrEnsName,
       address,
