@@ -1273,10 +1273,10 @@
     "@json-rpc-tools/types" "^1.7.6"
     "@pedrouid/environment" "^1.0.1"
 
-"@linkedmd/parser@^0.1.3":
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/@linkedmd/parser/-/parser-0.1.3.tgz#bd88af413eab35dd285c8b63184f23f98f255583"
-  integrity sha512-ZxWLftaCRbchWh16NO7eTaLP0J+eAM3Q+x0bo2kaqAdmj201B5VIbL78eFlIJhIkHf9Pa0nZCdEAkiIWLlfTrA==
+"@linkedmd/parser@0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@linkedmd/parser/-/parser-0.1.4.tgz#8ece82b8c52b552b1d3e128ed75215c7deb97745"
+  integrity sha512-tTjm+a5+TkVAwRW1J4AVA91o7B4pvu9VTB6wbAbsKnq2FltEienT+Wh8HkWq6clY3JumaiGyedbgNxAvESrMOA==
   dependencies:
     js-yaml "^4.1.0"
     marked "^4.0.18"
