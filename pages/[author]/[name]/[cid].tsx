@@ -13,7 +13,7 @@ type Props = {
   pkgVersion: PackageVersion
 }
 
-const dependantOrDependency = (pkgVersion, i) => {
+const dependantOrDependency = (pkgVersion: PackageVersion, i: number) => {
   return (
     <Link
       href={`/${pkgVersion.package.author.ensName || pkgVersion.package.author.address}/${

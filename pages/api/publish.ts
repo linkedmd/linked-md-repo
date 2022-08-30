@@ -43,7 +43,15 @@ export default async function publish(
       imports = await Promise.all(file.data.imports.map(async (namedImport) => {
         const [author, name, cid] = namedImport.fromModule.split('/')
         const formattedAuthor = await formatAddressOrEnsName(author)
-        return { authorAddress: formattedAuthor.address, name, cid }
+        return {
+          cid,
+          package: {
+            name,
+            author: {
+              address: formattedAuthor.address
+            }
+          }
+        }
       }))
     } catch (e) {
       throw PublishingErrors.Parse
@@ -60,6 +68,7 @@ export default async function publish(
     const packageExists = await getPackageVersion({ cid })
     if (packageExists) throw PublishingErrors.AlreadyExists
 
+    // @ts-ignore
     const success = await createPackage({ authorAddress, name, cid, imports })
 
     if (success) {

@@ -59,16 +59,11 @@ export async function createPackage({
       author: { address: authorAddress },
     },
   })
-  const dependencies = imports.map(({ authorAddress, name, cid, }) => ({
+  const dependencies = imports && imports.map((pkgVersion) => ({
     where: {
       node: {
-        cid: cid,
-        package: {
-          name: name,
-          author: {
-            address: authorAddress
-          }
-        },
+        cid: pkgVersion.cid,
+        package: pkgVersion.package,
       }
     }
   }))
@@ -166,9 +161,7 @@ export async function getPackages() {
   return pkgs
 }
 
-export async function getPackageVersion({
-  cid,
-}: FetchPackageParams) {
+export async function getPackageVersion({ cid }: { cid: string }) {
   const selectionSet = `
     {
       cid

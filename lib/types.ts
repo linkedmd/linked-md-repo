@@ -1,7 +1,8 @@
 type FetchPackageParams = {
+  authorAddress: string
   name: string
   cid?: string
-  authorAddress: string
+  imports?: Array<PackageVersion>
 }
 
 type Author = {
@@ -19,8 +20,10 @@ type Package = {
 
 type PackageVersion = {
   cid: string
-  createdAt: Date
   package: Package
+  createdAt: Date
+  dependencies?: Array<PackageVersion>
+  dependants?: Array<PackageVersion>
 }
 
 enum PublishingErrors {
