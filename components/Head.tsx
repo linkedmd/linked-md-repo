@@ -8,7 +8,7 @@ export default function WebsiteHead({ title }: any) {
   return (
     <Head>
       <title>{fullTitle}</title>
-      <link rel="shortcut icon" href="/favicon.png" />
+      <link rel="shortcut icon" href="/favicon.ico" />
       <meta name="description" content={description} />
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
