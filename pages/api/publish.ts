@@ -40,24 +40,30 @@ export default async function publish(
     try {
       const file = new LinkedMarkdown(await blob.text())
       await file.parse()
-      imports = await Promise.all(file.data.imports.map(async (namedImport) => {
-        const [author, name, cid] = namedImport.fromModule.split('/')
-        const formattedAuthor = await formatAddressOrEnsName(author)
-        return {
-          cid,
-          package: {
-            name,
-            author: {
-              address: formattedAuthor.address
-            }
+      imports = await Promise.all(
+        file.imports.map(async (importObj) => {
+          if (!importObj.named || importObj.from.indexOf('ipfs://') !== 0)
+            return
+
+          const [cid, name, author] = importObj.from
+            .split('ipfs://')[1]
+            .split('#')
+          const formattedAuthor = await formatAddressOrEnsName(author)
+          return {
+            cid,
+            package: {
+              name,
+              author: {
+                address: formattedAuthor.address,
+              },
+            },
           }
-        }
-      }))
+        })
+      )
     } catch (e) {
       throw PublishingErrors.Parse
     }
 
-    console.log(imports)
     let cid
     try {
       cid = await client.storeBlob(blob)

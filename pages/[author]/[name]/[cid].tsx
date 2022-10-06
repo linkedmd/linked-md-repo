@@ -8,6 +8,7 @@ import { formatAddressOrEnsName } from '../../../lib/ens'
 import WebsiteHead from '../../../components/Head'
 import { PackageVersion } from '../../../lib/types'
 import Link from 'next/link'
+import { LinkedMarkdownViewer } from '@linkedmd/components'
 
 type Props = {
   pkgVersion: PackageVersion
@@ -16,16 +17,19 @@ type Props = {
 const dependantOrDependency = (pkgVersion: PackageVersion, i: number) => {
   return (
     <Link
-      href={`/${pkgVersion.package.author.ensName || pkgVersion.package.author.address}/${
-        pkgVersion.package.name
-      }/${pkgVersion.cid}`}
+      href={`/${
+        pkgVersion.package.author.ensName || pkgVersion.package.author.address
+      }/${pkgVersion.package.name}/${pkgVersion.cid}`}
       key={i}
     >
-      <li className={tw`cursor-pointer underline text-gray-400 hover:text-gray-600`}>
-        {pkgVersion.package.author.ensName || pkgVersion.package.author.address.substring(0, 8)}...
+      <li
+        className={tw`cursor-pointer underline text-gray-400 hover:text-gray-600`}
+      >
+        {pkgVersion.package.author.ensName ||
+          pkgVersion.package.author.address.substring(0, 8)}
+        ...
         {pkgVersion.package.author.address.slice(-8)} /{' '}
-        {pkgVersion.package.name} /{' '}
-        {pkgVersion.cid.substring(0, 8)}...
+        {pkgVersion.package.name} / {pkgVersion.cid.substring(0, 8)}...
         {pkgVersion.cid.slice(-8)}
       </li>
     </Link>
@@ -45,21 +49,32 @@ const PackageVersion: NextPage<Props> = ({ pkgVersion }) => {
             name={pkgVersion.package.name}
             cid={pkgVersion.cid}
           />
-          <a href={`https://${pkgVersion.cid}.ipfs.nftstorage.link`} rel="noreferrer" target="_blank" className={tw`block mt-8 text-2xl underline text-gray-400 hover:text-gray-600`}>
+          <a
+            href={`https://${pkgVersion.cid}.ipfs.nftstorage.link`}
+            rel="noreferrer"
+            target="_blank"
+            className={tw`block mt-8 text-2xl underline text-gray-400 hover:text-gray-600`}
+          >
             View source on IPFS
           </a>
           <h3 className={tw`text-2xl mt-8`}>Dependencies</h3>
           <ul className={tw`bg-white dark:bg-slate-800`}>
             {pkgVersion.dependencies &&
               pkgVersion.dependencies.map((depPkgVersion, i) =>
-                dependantOrDependency(depPkgVersion, i))}
+                dependantOrDependency(depPkgVersion, i)
+              )}
           </ul>
           <h3 className={tw`text-2xl mt-8`}>Dependants</h3>
           <ul className={tw`bg-white dark:bg-slate-800`}>
             {pkgVersion.dependants &&
               pkgVersion.dependants.map((depPkgVersion, i) =>
-                dependantOrDependency(depPkgVersion, i))}
+                dependantOrDependency(depPkgVersion, i)
+              )}
           </ul>
+          <h3 className={tw`text-2xl mt-8`}>Preview</h3>
+          <LinkedMarkdownViewer
+            fileURI={`https://${pkgVersion.cid}.ipfs.nftstorage.link`}
+          />
         </>
       ) : (
         <>Package version not found</>
@@ -87,8 +102,6 @@ export async function getServerSideProps({
   let pkgVersion = await getPackageVersion({ cid })
 
   if (pkgVersion) pkgVersion.package.author = formattedAuthor
-
-  console.log(pkgVersion.package.author)
 
   return {
     props: { pkgVersion },

@@ -1,8 +1,15 @@
 @import url("https://fonts.kemitchell.com/equity-a.css");
+@import url("https://unpkg.com/style.css/style.css");
+@import url("https://unpkg.com/tippy.js@6.3.7/dist/tippy.css");
 
 body {
   font-family: 'Equity A', Georgia, serif !important;
   font-size: 1.25rem;
   line-height: 1.4;
   text-rendering: optimizeLegibility;
+}
+
+table {
+  width: 100% !important;
+  display: table !important;
 }

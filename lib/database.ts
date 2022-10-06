@@ -51,7 +51,7 @@ export async function createPackage({
   authorAddress,
   name,
   cid,
-  imports
+  imports,
 }: FetchPackageParams) {
   const pkg = await Package.find({
     where: {
@@ -59,14 +59,16 @@ export async function createPackage({
       author: { address: authorAddress },
     },
   })
-  const dependencies = imports && imports.map((pkgVersion) => ({
-    where: {
-      node: {
-        cid: pkgVersion.cid,
-        package: pkgVersion.package,
-      }
-    }
-  }))
+  const dependencies =
+    imports &&
+    imports.map((pkgVersion) => ({
+      where: {
+        node: {
+          cid: pkgVersion.cid,
+          package: pkgVersion.package,
+        },
+      },
+    }))
   if (pkg[0]) {
     const pkgVersion = await PackageVersion.create({
       input: [
@@ -80,8 +82,8 @@ export async function createPackage({
           },
           cid,
           dependencies: {
-            connect: dependencies
-          }
+            connect: dependencies,
+          },
         },
       ],
     })
@@ -105,8 +107,8 @@ export async function createPackage({
               node: {
                 cid,
                 dependencies: {
-                  connect: dependencies
-                }
+                  connect: dependencies,
+                },
               },
             },
           },

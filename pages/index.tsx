@@ -17,14 +17,10 @@ const Home: NextPage<Props> = ({ pkgs }) => {
   return (
     <div>
       <WebsiteHead title="Home" />
-      <table className={tw`border-collapse table-auto w-full text-sm`}>
+      <table>
         <thead>
           <tr>
-            <th
-              className={tw`border-b dark:border-slate-600 font-medium pr-4 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left`}
-            >
-              Name
-            </th>
+            <th>Name</th>
           </tr>
         </thead>
         <tbody className={tw`bg-white dark:bg-slate-800`}>

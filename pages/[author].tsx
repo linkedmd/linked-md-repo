@@ -21,14 +21,10 @@ const Author: NextPage<Props> = ({ author }) => {
         <>
           <Breadcrumbs author={author} />
           <h3 className={tw`text-2xl my-8`}>Packages by {author.formatted}</h3>
-          <table className={tw`border-collapse table-auto w-full text-sm`}>
+          <table>
             <thead>
               <tr>
-                <th
-                  className={tw`border-b font-medium pr-4 pt-0 pb-3 text-slate-400 text-left`}
-                >
-                  Name
-                </th>
+                <th>Name</th>
               </tr>
             </thead>
             <tbody className={tw`bg-white dark:bg-slate-800`}>

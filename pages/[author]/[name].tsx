@@ -22,24 +22,12 @@ const Package: NextPage<Props> = ({ pkg }) => {
         <>
           <Breadcrumbs author={pkg.author} name={pkg.name} />
           <h3 className={tw`text-2xl my-8`}>All versions</h3>
-          <table className={tw`border-collapse table-auto w-full text-sm`}>
+          <table>
             <thead>
               <tr>
-                <th
-                  className={tw`border-b font-medium pt-0 pb-3 text-slate-400 text-left`}
-                >
-                  Version
-                </th>
-                <th
-                  className={tw`border-b font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 text-left`}
-                >
-                  IPFS ID
-                </th>
-                <th
-                  className={tw`border-b font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 text-left`}
-                >
-                  Date
-                </th>
+                <th>Version</th>
+                <th>IPFS ID</th>
+                <th>Date</th>
               </tr>
             </thead>
             <tbody className={tw`bg-white dark:bg-slate-800`}>
