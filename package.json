@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@linkedmd/components": "^0.0.7",
-    "@linkedmd/parser": "^0.2.1",
+    "@linkedmd/parser": "^0.2.2",
     "@neo4j/graphql": "^3.6.3",
     "@neo4j/graphql-ogm": "^3.6.3",
     "@rainbow-me/rainbowkit": "^0.5.0",
