@@ -6,9 +6,9 @@ const ETH_ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/
 const DOMAIN_REGEX =
   /^(((?!\-))(xn\-\-)?[a-z0-9\-_]{0,61}[a-z0-9]{1,1}\.)*(xn\-\-)?([a-z0-9\-]{1,61}|[a-z0-9\-]{1,30})\.[a-z]{2,}$/
 
-const provider = ethers.providers.InfuraProvider.getWebSocketProvider(
+const provider = ethers.providers.AlchemyProvider.getWebSocketProvider(
   chain.mainnet.id,
-  process.env.INFURA_ID
+  process.env.ALCHEMY_ID
 )
 
 function sliced(address: string): string {
