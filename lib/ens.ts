@@ -6,9 +6,9 @@ const ETH_ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/
 const DOMAIN_REGEX =
   /^(((?!\-))(xn\-\-)?[a-z0-9\-_]{0,61}[a-z0-9]{1,1}\.)*(xn\-\-)?([a-z0-9\-]{1,61}|[a-z0-9\-]{1,30})\.[a-z]{2,}$/
 
-const provider = ethers.providers.AlchemyProvider.getWebSocketProvider(
-  chain.mainnet.id,
-  process.env.ALCHEMY_ID
+const provider = providers.WebSocketProvider(
+  `wss://eth-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_ID}`,
+  chain.mainnet.id
 )
 
 function sliced(address: string): string {
